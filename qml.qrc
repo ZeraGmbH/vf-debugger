@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main-debugger.qml</file>
+        <file>EntityViewDelegate.qml</file>
+    </qresource>
+</RCC>
