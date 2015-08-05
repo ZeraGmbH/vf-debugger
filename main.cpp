@@ -14,10 +14,13 @@
 
 int main(int argc, char *argv[])
 {
-  qRegisterMetaType<QList<int> >("QList<int>");
   qRegisterMetaTypeStreamOperators<QList<double> >("QList<double>");
   qRegisterMetaTypeStreamOperators<QList<int> >("QList<int>");
   qRegisterMetaTypeStreamOperators<QList<QString> >("QList<QString>");
+
+  QString categoryLoggingFormat = "%{if-debug}DD%{endif}%{if-warning}WW%{endif}%{if-critical}EE%{endif}%{if-fatal}FATAL%{endif} %{category} %{message}";
+
+  qSetMessagePattern(categoryLoggingFormat);
 
   QGuiApplication app(argc, argv);
 

@@ -73,7 +73,7 @@ Rectangle {
       }
       Rectangle {
         height: parent.height
-        width: root.width/100*45
+        width: root.width/100*46
         Text { text: root.entity[componentName].toString(); anchors.fill: parent; anchors.margins: 4 }
       }
       Item {
