@@ -11,8 +11,8 @@ VEIN_DEP_TCP = 1
 VEIN_DEP_HELPER = 1
 VEIN_DEP_QML = 1
 
-exists( ../../project-paths.pri ) {
-  include(../../project-paths.pri)
+exists( ../../vein-framework.pri ) {
+  include(../../vein-framework.pri)
 }
 
 QT += qml quick
