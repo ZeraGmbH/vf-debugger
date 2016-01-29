@@ -54,27 +54,47 @@ Rectangle {
       Rectangle {
         height: parent.height
         width: parent.width/100*12
-        Text { text: root.entityName; anchors.fill: parent; anchors.margins: 4 }
+        Text {
+          text: root.entityName;
+          anchors.fill: parent;
+          anchors.margins: 4
+        }
       }
       Rectangle {
         height: parent.height
         width: parent.width/100*20
-        Text { text: componentName; anchors.fill: parent; anchors.margins: 4 }
+        Text {
+          text: componentName;
+          anchors.fill: parent;
+          anchors.margins: 4
+        }
       }
       Rectangle {
         height: parent.height
         width: parent.width/100*8
-        Text { text: typeof(root.entity[componentName]); anchors.fill: parent; anchors.margins: 4 }
+        Text {
+          text: typeof(root.entity[componentName]);
+          anchors.fill: parent;
+          anchors.margins: 4
+        }
       }
       Rectangle {
         height: parent.height
         width: parent.width/100*10
-        Text { text: root.entity[componentName].length === undefined ? "" : root.entity[componentName].length.toString(); anchors.fill: parent; anchors.margins: 4 }
+        Text {
+          text: (root.entity[componentName].length === undefined || typeof(root.entity[componentName].length) != "number") ? "" : root.entity[componentName].length.toString();
+          anchors.fill: parent;
+          anchors.margins: 4
+        }
       }
       Rectangle {
         height: parent.height
         width: root.width/100*46
-        Text { text: root.entity[componentName].toString(); anchors.fill: parent; anchors.margins: 4 }
+        Text {
+          text: root.entity[componentName].toString();
+          anchors.fill: parent;
+          anchors.margins: 4
+        }
       }
       Item {
         height: parent.height-4
