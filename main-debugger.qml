@@ -10,7 +10,9 @@ Window {
   height: 600
 
   Component.onCompleted: {
-    VeinEntity.setRequiredIds(VeinEntity.getEntity("_System")["Entities"])
+    var entIds = VeinEntity.getEntity("_System")["Entities"];
+    entIds.push(0);
+    VeinEntity.setRequiredIds(entIds)
     console.log(VeinEntity.getEntity("_System")["Entities"])
   }
 

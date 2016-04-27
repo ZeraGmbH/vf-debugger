@@ -14,6 +14,7 @@
 
 int main(int argc, char *argv[])
 {
+  bool loadedOnce=false;
   qRegisterMetaTypeStreamOperators<QList<double> >("QList<double>");
   qRegisterMetaTypeStreamOperators<QList<int> >("QList<int>");
   qRegisterMetaTypeStreamOperators<QList<QString> >("QList<QString>");
@@ -49,9 +50,10 @@ int main(int argc, char *argv[])
   QList<VeinEvent::EventSystem*> subSystems;
 
   QObject::connect(qmlApi,&VeinApiQml::VeinQml::sigStateChanged, [&](VeinApiQml::VeinQml::ConnectionState t_state){
-    if(t_state == VeinApiQml::VeinQml::ConnectionState::VQ_LOADED)
+    if(t_state == VeinApiQml::VeinQml::ConnectionState::VQ_LOADED && loadedOnce == false)
     {
       engine.load(QUrl(QStringLiteral("qrc:/main-debugger.qml")));
+      loadedOnce=true;
     }
     else if(t_state == VeinApiQml::VeinQml::ConnectionState::VQ_ERROR)
     {
@@ -68,7 +70,9 @@ int main(int argc, char *argv[])
 
   evHandler->setSubsystems(subSystems);
 
-  tcpSystem->connectToServer("127.0.0.1", 8008);
+  //tcpSystem->connectToServer("192.168.7.221", 12000);
+  //tcpSystem->connectToServer("127.0.0.1", 8008);
+  tcpSystem->connectToServer("127.0.0.1", 12000);
 
   QTimer *timer = new QTimer(&app);
   timer->setSingleShot(true);
