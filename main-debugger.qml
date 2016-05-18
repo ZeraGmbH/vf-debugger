@@ -1,6 +1,7 @@
 import QtQuick 2.2
 import QtQuick.Window 2.2
 import VeinEntity 1.0
+import Qt.labs.controls 1.0 //as LC
 
 Window {
   id: root
@@ -28,10 +29,22 @@ Window {
     id: fakeModel
   }
 
+  Row {
+    height: 30
+    Button {
+      id: expanderButton
+      checkable: true
+      checked: true
+      text: checked ? "Collapse all" : "Expand all"
+      height: 30
+    }
+  }
+
 
   Row {
     id: headLine
     anchors.top: parent.top
+    anchors.topMargin: 30
     height:  30
     width: root.width
     spacing: 0
@@ -81,7 +94,7 @@ Window {
     id: entView
     clip: true
     anchors.fill: parent
-    anchors.topMargin: headLine.height
+    anchors.topMargin: headLine.height + expanderButton.height
     model: fakeModel
 
     remove: Transition {
@@ -97,6 +110,6 @@ Window {
         NumberAnimation { properties: "x"; from: 1000; duration: 300 }
       }
     }
-    delegate: EntityViewDelegate {width: root.width; entityName: name}
+    delegate: EntityViewDelegate {width: root.width; entityName: name; checked: expanderButton.checked}
   }
 }

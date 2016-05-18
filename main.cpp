@@ -70,19 +70,13 @@ int main(int argc, char *argv[])
 
   evHandler->setSubsystems(subSystems);
 
-  //tcpSystem->connectToServer("192.168.7.221", 12000);
+  tcpSystem->connectToServer("192.168.7.221", 12000);
   //tcpSystem->connectToServer("127.0.0.1", 8008);
-  tcpSystem->connectToServer("127.0.0.1", 12000);
+  //tcpSystem->connectToServer("127.0.0.1", 12000);
 
-  QTimer *timer = new QTimer(&app);
-  timer->setSingleShot(true);
-
-  QObject::connect(timer, &QTimer::timeout, [=]() {
+  QObject::connect(tcpSystem, &VeinNet::TcpSystem::sigConnnectionEstablished, [=]() {
     qmlApi->setRequiredIds(QList<int>()<<0);
-
-    timer->deleteLater();
   });
 
-  timer->start(0);
   return app.exec();
 }
