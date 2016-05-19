@@ -7,8 +7,11 @@ Window {
   id: root
   visible: true
 
-  width: 800
-  height: 600
+  width: 1024
+  height: 768
+
+  property int totalProperties: 0
+  property int totalEntities: 0
 
   Component.onCompleted: {
     var entIds = VeinEntity.getEntity("_System")["Entities"];
@@ -22,6 +25,8 @@ Window {
     onSigEntityAvailable: {
       console.log("AVAILABLE", t_entityName)
       fakeModel.append({"name":t_entityName});
+      totalProperties += VeinEntity.getEntity(t_entityName).propertyCount();
+      ++totalEntities;
     }
   }
 
@@ -31,12 +36,18 @@ Window {
 
   Row {
     height: 30
+    spacing: 8
     Button {
       id: expanderButton
       checkable: true
-      checked: true
-      text: checked ? "Collapse all" : "Expand all"
+      checked: false
+      text: (checked ? "Collapse all" : "Expand all")
       height: 30
+    }
+    Text {
+      text: qsTr("Total entities: %1\t Total properties: %2").arg(root.totalEntities).arg(root.totalProperties)
+      anchors.verticalCenter: parent.verticalCenter
+
     }
   }
 
