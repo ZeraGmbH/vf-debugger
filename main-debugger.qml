@@ -12,21 +12,35 @@ Window {
 
   property int totalProperties: 0
   property int totalEntities: 0
+  property bool entitiesLoaded: false
 
   Component.onCompleted: {
-    var entIds = VeinEntity.getEntity("_System")["Entities"];
-    entIds.push(0);
-    VeinEntity.setRequiredIds(entIds)
     console.log(VeinEntity.getEntity("_System")["Entities"])
+    delayedLoader.start()
+  }
+
+  Timer {
+    id: delayedLoader
+    interval: 50
+    repeat: false
+    onTriggered: {
+      var entIds = VeinEntity.getEntity("_System")["Entities"];
+      //entIds.push(0);
+      VeinEntity.setRequiredIds(entIds)
+      entitiesLoaded = true
+    }
   }
 
   Connections {
     target: VeinEntity
     onSigEntityAvailable: {
-      console.log("AVAILABLE", t_entityName)
-      fakeModel.append({"name":t_entityName});
-      totalProperties += VeinEntity.getEntity(t_entityName).propertyCount();
-      ++totalEntities;
+      if(entitiesLoaded === true)
+      {
+        console.log(qsTr("AVAILABLE '%1'").arg(t_entityName))
+        fakeModel.append({"name":t_entityName});
+        totalProperties += VeinEntity.getEntity(t_entityName).propertyCount();
+        ++totalEntities;
+      }
     }
   }
 
