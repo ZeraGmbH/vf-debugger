@@ -22,7 +22,8 @@ Rectangle {
       anchors.fill: parent
       anchors.leftMargin: 4
       anchors.topMargin: 2
-      text: (visibleBox.checked ? "[-] " : "[+] ") + root.entityName + " (" + root.entity.propertyCount() + ")"
+      textFormat: Text.RichText
+      text: (visibleBox.checked ? "[-] " : "[+] ") + root.entityName + " <font color='blue'>ID: "+ root.entity.entityId() + "</font> (" + root.entity.propertyCount() + ")"
       font.family: "Monospace"
     }
   }

@@ -25,7 +25,15 @@ Window {
     repeat: false
     onTriggered: {
       var entIds = VeinEntity.getEntity("_System")["Entities"];
-      //entIds.push(0);
+      if(entIds !== undefined)
+      {
+        entIds.push(0);
+      }
+      else
+      {
+        entIds = [0];
+      }
+
       VeinEntity.setRequiredIds(entIds)
       entitiesLoaded = true
     }

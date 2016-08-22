@@ -26,3 +26,15 @@ QML_IMPORT_PATH =
 
 # Default rules for deployment.
 include(deployment.pri)
+
+contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
+    ANDROID_EXTRA_LIBS = \
+        $$PWD/../../libs-android/libvein-event.so \
+        $$PWD/../../libs-android/libvein-component.so \
+        /work/downloads/protobuf-2.5.0/build/lib/libprotobuf.so \
+        $$PWD/../../libs-android/libxiqnet.so \
+        $$PWD/../../libs-android/libvein-framework-protobuf.so \
+        $$PWD/../../libs-android/libvein-net.so \
+        $$PWD/../../libs-android/libqml-veinentity.so \
+        $$PWD/../../libs-android/libvein-hash.so
+}
