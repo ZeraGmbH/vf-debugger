@@ -38,3 +38,5 @@ contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
         $$PWD/../../libs-android/libqml-veinentity.so \
         $$PWD/../../libs-android/libvein-hash.so
 }
+
+include(/work/downloads/git-clones/SortFilterProxyModel/SortFilterProxyModel.pri)

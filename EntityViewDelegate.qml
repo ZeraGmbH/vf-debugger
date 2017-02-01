@@ -1,174 +1,116 @@
 import QtQuick 2.0
 import VeinEntity 1.0
-import Qt.labs.controls 1.0 //as LC
+import QtQuick.Controls 2.0
+import SortFilterProxyModel 0.2
 
 Rectangle {
   id: root
+  height: 30
+  border.color: "#44000000"
+  width: root.width
   property string entityName;
+  property string componentName;
   property QtObject entity;
   property bool checked: true;
 
-  height: (componentModel.count*30*visibleBox.checked) + visibleBox.height
+  property string filterPattern;
 
-  Button {
-    id: visibleBox
-    text: ""
-    height: 20
-    width: parent.width/100*32
-    anchors.top: parent.top
-    checkable: true
-    checked: root.checked
-    Text {
-      anchors.fill: parent
-      anchors.leftMargin: 4
-      anchors.topMargin: 2
-      textFormat: Text.RichText
-      text: (visibleBox.checked ? "[-] " : "[+] ") + root.entityName + " <font color='blue'>ID: "+ root.entity.entityId() + "</font> (" + root.entity.propertyCount() + ")"
-      font.family: "Monospace"
-    }
-  }
-
-  onEntityNameChanged: {
-    entity = VeinEntity.getEntity(entityName);
-
-    var keyList = entity.keys();
-    for(var i=0; i<keyList.length; ++i)
-    {
-      var componentName = keyList[i];
-      componentModel.append({"componentName":componentName})
-    }
-  }
-
-  ListModel {
-    id: componentModel
-  }
-
-
-
-  ListView {
-    id: entView
+  Row {
     anchors.fill: parent
-    anchors.topMargin: visibleBox.height
-    model: componentModel
-    visible: visibleBox.checked
+    spacing: 0
+    clip: true
 
-    remove: Transition {
-      ParallelAnimation {
-        NumberAnimation { property: "opacity"; to: 0; duration: 300 }
-        NumberAnimation { properties: "x"; to: 1000; duration: 300 }
+    Item {
+      height: parent.height
+      width: parent.width*0.16
+      Text {
+        text: root.entityName + " <font color='blue'>ID: "+ root.entity.entityId() + "</font>";
+        anchors.fill: parent;
+        anchors.margins: 4
       }
     }
-
-    add: Transition {
-      ParallelAnimation {
-        NumberAnimation { property: "opacity"; to: 1; duration: 300 }
-        NumberAnimation { properties: "x"; from: 1000; duration: 300 }
+    Item {
+      height: parent.height
+      width: parent.width*0.16
+      Text {
+        text: componentName;
+        anchors.fill: parent;
+        anchors.margins: 4
       }
     }
-
-    delegate: Rectangle {
-      height: 30
-      width: root.width
-      border.color: "#44000000"
-      color: index%2>0 ? "white" : "ghostwhite"
-      Row {
-        anchors.fill: parent
-        spacing: 0
-        clip: true
-
-        Item {
-          height: parent.height
-          width: parent.width/100*12
-          Text {
-            text: root.entityName;
-            anchors.fill: parent;
-            anchors.margins: 4
+    Item {
+      height: parent.height
+      width: parent.width*0.08
+      Text {
+        text: typeof(root.entity[componentName]);
+        anchors.fill: parent;
+        anchors.margins: 4
+      }
+    }
+    Item {
+      height: parent.height
+      width: parent.width*0.10
+      Text {
+        text: (root.entity[componentName].length === undefined || typeof(root.entity[componentName].length) != "number") ? "" : root.entity[componentName].length.toString();
+        anchors.fill: parent;
+        anchors.margins: 4
+      }
+    }
+    Item {
+      height: parent.height
+      width: root.width*0.41
+      Text {
+        text: root.entity[componentName].toString();
+        anchors.fill: parent;
+        anchors.margins: 4
+      }
+    }
+    Item {
+      height: parent.height-4
+      width: root.width*0.05
+      Rectangle {
+        height:parent.height - anchors.margins
+        width: parent.height - anchors.margins
+        anchors.centerIn: parent
+        anchors.margins: 8
+        color: "steelblue"
+        border.width: 1
+        border.color: "black"
+        radius: Math.round(height+width/2)
+        smooth: true
+        antialiasing: true
+        MouseArea {
+          anchors.fill: parent
+          onPressedChanged: {
+            parent.color = pressed ? "lightsteelblue" : "steelblue"
+          }
+          onReleased: {
+            console.log('VeinEntity.getEntity("'+root.entityName+'")["'+componentName+'"]')
           }
         }
-        Item {
-          height: parent.height
-          width: parent.width/100*20
-          Text {
-            text: componentName;
-            anchors.fill: parent;
-            anchors.margins: 4
+      }
+    }
+    Item {
+      height: parent.height-4
+      width: root.width*0.05
+      Rectangle {
+        height:parent.height - anchors.margins
+        width: parent.height - anchors.margins
+        anchors.centerIn: parent
+        anchors.margins: 8
+        color: "green"
+        border.width: 1
+        border.color: "black"
+        radius: Math.round(height+width/2)
+        smooth: true
+        antialiasing: true
+        MouseArea {
+          anchors.fill: parent
+          onPressedChanged: {
+            parent.color = pressed ? "purple" : "green"
           }
-        }
-        Item {
-          height: parent.height
-          width: parent.width/100*8
-          Text {
-            text: typeof(root.entity[componentName]);
-            anchors.fill: parent;
-            anchors.margins: 4
-          }
-        }
-        Item {
-          height: parent.height
-          width: parent.width/100*10
-          Text {
-            text: (root.entity[componentName].length === undefined || typeof(root.entity[componentName].length) != "number") ? "" : root.entity[componentName].length.toString();
-            anchors.fill: parent;
-            anchors.margins: 4
-          }
-        }
-        Item {
-          height: parent.height
-          width: root.width/100*41
-          Text {
-            text: root.entity[componentName].toString();
-            anchors.fill: parent;
-            anchors.margins: 4
-          }
-        }
-        Item {
-          height: parent.height-4
-          width: root.width/100*5
-          Rectangle {
-            height:parent.height - anchors.margins
-            width: parent.height - anchors.margins
-            anchors.centerIn: parent
-            anchors.margins: 8
-            color: "steelblue"
-            border.width: 1
-            border.color: "black"
-            radius: Math.round(height+width/2)
-            smooth: true
-            antialiasing: true
-            MouseArea {
-              anchors.fill: parent
-              onPressedChanged: {
-                parent.color = pressed ? "lightsteelblue" : "steelblue"
-              }
-              onReleased: {
-                console.log('VeinEntity.getEntity("'+root.entityName+'")["'+componentName+'"]')
-              }
-            }
-          }
-        }
-        Item {
-          height: parent.height-4
-          width: root.width/100*5
-          Rectangle {
-            height:parent.height - anchors.margins
-            width: parent.height - anchors.margins
-            anchors.centerIn: parent
-            anchors.margins: 8
-            color: "green"
-            border.width: 1
-            border.color: "black"
-            radius: Math.round(height+width/2)
-            smooth: true
-            antialiasing: true
-            MouseArea {
-              anchors.fill: parent
-              onPressedChanged: {
-                parent.color = pressed ? "purple" : "green"
-              }
-              onReleased: {
-                console.log('VeinEntity.getEntity("'+root.entityName+'")["'+componentName+'"]:', VeinEntity.getEntity(root.entityName)[componentName])
-              }
-            }
+          onReleased: {
+            console.log('VeinEntity.getEntity("'+root.entityName+'")["'+componentName+'"]:', VeinEntity.getEntity(root.entityName)[componentName])
           }
         }
       }
