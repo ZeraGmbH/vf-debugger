@@ -15,9 +15,6 @@
 int main(int argc, char *argv[])
 {
   bool loadedOnce=false;
-  qRegisterMetaTypeStreamOperators<QList<double> >("QList<double>");
-  qRegisterMetaTypeStreamOperators<QList<int> >("QList<int>");
-  qRegisterMetaTypeStreamOperators<QList<QString> >("QList<QString>");
 
   QString categoryLoggingFormat = "%{if-debug}DD%{endif}%{if-warning}WW%{endif}%{if-critical}EE%{endif}%{if-fatal}FATAL%{endif} %{category} %{message}";
 
@@ -37,9 +34,6 @@ int main(int argc, char *argv[])
 
   QQmlApplicationEngine engine;
 
-
-  //register QML type
-  VeinApiQml::QmlWrapper::registerTypes();
 
   VeinEvent::EventHandler *evHandler = new VeinEvent::EventHandler(&app);
   VeinNet::NetworkSystem *netSystem = new VeinNet::NetworkSystem(&app);
