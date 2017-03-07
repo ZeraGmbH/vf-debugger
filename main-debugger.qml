@@ -181,19 +181,6 @@ Window {
     anchors.topMargin: headLine.height + headerBar.height
     model: entityProxyModel
 
-    remove: Transition {
-      ParallelAnimation {
-        NumberAnimation { property: "opacity"; to: 0; duration: 300 }
-        NumberAnimation { properties: "x"; to: 1000; duration: 300 }
-      }
-    }
-
-    add: Transition {
-      ParallelAnimation {
-        NumberAnimation { property: "opacity"; to: 1; duration: 300 }
-        NumberAnimation { properties: "x"; from: 1000; duration: 300 }
-      }
-    }
     delegate: EntityViewDelegate {
       width: root.width;
       entityName: entName;
