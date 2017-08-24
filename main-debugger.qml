@@ -9,7 +9,7 @@ Window {
   id: root
   visible: true
 
-  width: 1024
+  width: 1280
   height: 768
 
   property int totalProperties: 0
@@ -174,12 +174,31 @@ Window {
     ]
   }
 
+  Component {
+    id: sectionHeading
+    Rectangle {
+      width: root.width
+      height: childrenRect.height
+      color: "lightblue"
+
+      Text {
+        text: section
+        font.bold: true
+        font.pixelSize: 20
+        x: 4
+      }
+    }
+  }
+
   ListView {
     id: entView
     clip: true
     anchors.fill: parent
     anchors.topMargin: headLine.height + headerBar.height
     model: entityProxyModel
+    section.property: "entName"
+    section.criteria: ViewSection.FullString
+    section.delegate: sectionHeading
 
     delegate: EntityViewDelegate {
       width: root.width;
