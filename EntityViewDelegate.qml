@@ -51,7 +51,7 @@ Rectangle {
       height: parent.height
       width: parent.width*0.10
       Text {
-        text: (root.entity[componentName].length === undefined || typeof(root.entity[componentName].length) != "number") ? "" : root.entity[componentName].length.toString();
+        text: (root.entity[componentName] === undefined || root.entity[componentName].length === undefined || typeof(root.entity[componentName].length) != "number") ? "" : root.entity[componentName].length.toString();
         anchors.fill: parent;
         anchors.margins: 4
       }
@@ -60,7 +60,7 @@ Rectangle {
       height: parent.height
       width: root.width*0.41
       Text {
-        text: root.entity[componentName].toString();
+        text: root.entity[componentName] !== undefined ? root.entity[componentName].toString() : "";
         anchors.fill: parent;
         anchors.margins: 4
       }
