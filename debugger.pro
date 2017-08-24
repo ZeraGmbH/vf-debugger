@@ -15,6 +15,10 @@ exists( ../../vein-framework.pri ) {
   include(../../vein-framework.pri)
 }
 
+unix {
+    target.path = /usr/bin
+}
+
 QT += qml quick
 
 SOURCES += main.cpp
