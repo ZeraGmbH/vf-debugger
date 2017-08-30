@@ -15,6 +15,20 @@ Rectangle {
 
   property string filterPattern;
 
+  function valueToString(t_value) {
+    var retVal = "";
+    if(t_value !== undefined)
+    {
+      retVal = t_value.toString();
+      if (retVal === "[object Object]")
+      {
+        retVal = JSON.stringify(t_value);
+      }
+    }
+
+    return retVal;
+  }
+
   Row {
     anchors.fill: parent
     spacing: 0
@@ -60,7 +74,7 @@ Rectangle {
       height: parent.height
       width: root.width*0.41
       Text {
-        text: root.entity[componentName] !== undefined ? root.entity[componentName].toString() : "";
+        text: valueToString(root.entity[componentName]);
         anchors.fill: parent;
         anchors.margins: 4
       }
@@ -110,7 +124,7 @@ Rectangle {
             parent.color = pressed ? "purple" : "green"
           }
           onReleased: {
-            console.log('VeinEntity.getEntity("'+root.entityName+'")["'+componentName+'"]:', VeinEntity.getEntity(root.entityName)[componentName])
+            console.log('VeinEntity.getEntity("'+root.entityName+'")["'+componentName+'"]:', valueToString(VeinEntity.getEntity(root.entityName)[componentName]));
           }
         }
       }
