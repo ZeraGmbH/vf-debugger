@@ -14,6 +14,7 @@ Window {
 
   property int totalProperties: 0
   property int totalEntities: 0
+  property int totalRPC: 0
   property bool entitiesLoaded: false
   property string filterPattern: searchField.text
 
@@ -53,8 +54,16 @@ Window {
         totalProperties += tmpEntity.propertyCount();
         for(var i = 0; i< tmpEntity.keys().length; ++i)
         {
-          fakeModel.append({"entId": tmpEntityId, "entName":t_entityName, "compName": tmpEntity.keys()[i]});
+          fakeModel.append({"entId": tmpEntityId, "entName":t_entityName, "compName": tmpEntity.keys()[i], "isRPC": false});
         }
+        var rpcList = tmpEntity.remoteProcedures;
+        totalRPC += rpcList.length;
+        for(var j = 0; j<rpcList.length; ++j)
+        {
+          console.log("T1", rpcList, rpcList[j])
+          fakeModel.append({"entId": tmpEntityId, "entName":t_entityName, "compName": rpcList[j], "isRPC": true});
+        }
+
         ++totalEntities;
       }
     }
@@ -75,7 +84,7 @@ Window {
     rowSpacing: 8
     rows: 1
     Text {
-      text: qsTr("Total entities: %1\t Total properties: %2\t Search results: %3").arg(root.totalEntities).arg(root.totalProperties).arg(entityProxyModel.count)
+      text: qsTr("Total entities: %1\t Total properties: %2\t Total remote procedures: %3\t Search results: %4").arg(root.totalEntities).arg(root.totalProperties).arg(root.totalRPC).arg(entityProxyModel.count)
       anchors.verticalCenter: parent.verticalCenter
     }
     Item {

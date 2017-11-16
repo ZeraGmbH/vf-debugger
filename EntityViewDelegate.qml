@@ -56,7 +56,7 @@ Rectangle {
       height: parent.height
       width: parent.width*0.08
       Text {
-        text: typeof(root.entity[componentName]);
+        text: isRPC ? "rpc" : typeof(root.entity[componentName]);
         anchors.fill: parent;
         anchors.margins: 4
       }
@@ -99,7 +99,14 @@ Rectangle {
             parent.color = pressed ? "lightsteelblue" : "steelblue"
           }
           onReleased: {
-            console.log('VeinEntity.getEntity("'+root.entityName+'")["'+componentName+'"]')
+            if(isRPC === true)
+            {
+              console.log('var tracerUID = VeinEntity.getEntity("'+root.entityName+'").invokeRPC("'+componentName+'", <parameterObject>)');
+            }
+            else
+            {
+              console.log('VeinEntity.getEntity("'+root.entityName+'")["'+componentName+'"]')
+            }
           }
         }
       }
@@ -124,7 +131,14 @@ Rectangle {
             parent.color = pressed ? "purple" : "green"
           }
           onReleased: {
-            console.log('VeinEntity.getEntity("'+root.entityName+'")["'+componentName+'"]:', valueToString(VeinEntity.getEntity(root.entityName)[componentName]));
+            if(isRPC === true)
+            {
+              console.log('var tracerUID = VeinEntity.getEntity("'+root.entityName+'").invokeRPC("'+componentName+'", <parameterObject>)');
+            }
+            else
+            {
+              console.log('VeinEntity.getEntity("'+root.entityName+'")["'+componentName+'"]:', valueToString(VeinEntity.getEntity(root.entityName)[componentName]));
+            }
           }
         }
       }
