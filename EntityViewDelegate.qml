@@ -45,7 +45,7 @@ Rectangle {
     }
     Item {
       height: parent.height
-      width: parent.width*0.16
+      width: parent.width*0.2
       Text {
         text: componentName;
         anchors.fill: parent;
@@ -63,7 +63,7 @@ Rectangle {
     }
     Item {
       height: parent.height
-      width: parent.width*0.10
+      width: parent.width*0.06
       Text {
         text: (root.entity[componentName] === undefined || root.entity[componentName].length === undefined || typeof(root.entity[componentName].length) != "number") ? "" : root.entity[componentName].length.toString();
         anchors.fill: parent;

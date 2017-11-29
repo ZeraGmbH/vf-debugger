@@ -60,7 +60,6 @@ Window {
         totalRPC += rpcList.length;
         for(var j = 0; j<rpcList.length; ++j)
         {
-          console.log("T1", rpcList, rpcList[j])
           fakeModel.append({"entId": tmpEntityId, "entName":t_entityName, "compName": rpcList[j], "isRPC": true});
         }
 
@@ -123,7 +122,7 @@ Window {
     Rectangle {
       color: "lightblue"
       height: parent.height
-      width: parent.width*0.16
+      width: parent.width*0.2
       border.width: 1
       border.color: "black"
       Text { text: "Component name"; font.bold: true; anchors.fill: parent; anchors.margins: 4 }
@@ -139,7 +138,7 @@ Window {
     Rectangle {
       color: "lightblue"
       height: parent.height
-      width: parent.width*0.10
+      width: parent.width*0.06
       border.width: 1
       border.color: "black"
       Text { text: "Size"; font.bold: true; anchors.fill: parent; anchors.margins: 4 }
