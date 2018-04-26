@@ -19,7 +19,8 @@ Window {
   property string filterPattern: searchField.text
 
   Component.onCompleted: {
-    console.log(VeinEntity.getEntity("_System")["Entities"])
+    showMaximized();
+    console.log("onCompleted", VeinEntity.getEntity("_System")["Entities"])
     delayedLoader.start()
   }
 

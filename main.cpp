@@ -34,7 +34,6 @@ int main(int argc, char *argv[])
 
   QQmlApplicationEngine engine;
 
-
   VeinEvent::EventHandler *evHandler = new VeinEvent::EventHandler(&app);
   VeinNet::NetworkSystem *netSystem = new VeinNet::NetworkSystem(&app);
   VeinNet::TcpSystem *tcpSystem = new VeinNet::TcpSystem(&app);
@@ -64,9 +63,7 @@ int main(int argc, char *argv[])
 
   evHandler->setSubsystems(subSystems);
 
-  tcpSystem->connectToServer("192.168.7.222", 12000);
-  //tcpSystem->connectToServer("127.0.0.1", 8008);
-  //tcpSystem->connectToServer("127.0.0.1", 12000);
+  tcpSystem->connectToServer("127.0.0.1", 12000);
 
   QObject::connect(tcpSystem, &VeinNet::TcpSystem::sigConnnectionEstablished, [=]() {
     qmlApi->setRequiredIds(QList<int>()<<0);
