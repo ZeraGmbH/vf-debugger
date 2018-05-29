@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
   tcpSystem->connectToServer("127.0.0.1", 12000);
 
   QObject::connect(tcpSystem, &VeinNet::TcpSystem::sigConnnectionEstablished, [=]() {
-    qmlApi->setRequiredIds(QList<int>()<<0);
+    qmlApi->entitySubscribeById(0);
   });
 
   return app.exec();

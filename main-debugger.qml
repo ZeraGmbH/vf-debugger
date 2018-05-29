@@ -39,7 +39,11 @@ Window {
         entIds = [0];
       }
 
-      VeinEntity.setRequiredIds(entIds)
+      for(var tmpId in entIds)
+      {
+        VeinEntity.entitySubscribeById(entIds[tmpId]);
+      }
+
       entitiesLoaded = true
     }
   }
@@ -208,6 +212,7 @@ Window {
     section.property: "entName"
     section.criteria: ViewSection.FullString
     section.delegate: sectionHeading
+    section.labelPositioning: ViewSection.InlineLabels | ViewSection.CurrentLabelAtStart // | ViewSection.NextLabelAtEnd
 
     delegate: EntityViewDelegate {
       width: root.width;
