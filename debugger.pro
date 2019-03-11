@@ -42,4 +42,9 @@ contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
         $$PWD/../../libs-android/libvein-hash.so
 }
 
-include(/work/downloads/git-clones/SortFilterProxyModel/SortFilterProxyModel.pri)
+isEmpty(SORT_FILTER_PROXY_PRI) {
+  error("Set SORT_FILTER_PROXY_PRI to the .pri file of qml SortFilterProxyModel")
+  #clone from: https://github.com/oKcerG/SortFilterProxyModel
+  #(example) in QtCreator add qmake argument: SORT_FILTER_PROXY_PRI=<some path ...>/SortFilterProxyModel/SortFilterProxyModel.pri
+}
+include($$SORT_FILTER_PROXY_PRI)
