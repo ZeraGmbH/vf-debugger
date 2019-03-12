@@ -20,8 +20,23 @@ Window {
 
   Component.onCompleted: {
     showMaximized();
-    console.log("onCompleted", VeinEntity.getEntity("_System")["Entities"])
+    var systemEntity = VeinEntity.getEntity("_System");
+    console.log("onCompleted", systemEntity["Entities"])
     delayedLoader.start()
+
+    totalProperties += systemEntity.propertyCount();
+    for(var i = 0; i< systemEntity.keys().length; ++i)
+    {
+      fakeModel.append({"entId": 0, "entName":systemEntity.EntityName, "compName": systemEntity.keys()[i], "isRPC": false});
+    }
+    var rpcList = systemEntity.remoteProcedures;
+    totalRPC += rpcList.length;
+    for(var j = 0; j<rpcList.length; ++j)
+    {
+      fakeModel.append({"entId": 0, "entName":systemEntity.EntityName, "compName": rpcList[j], "isRPC": true});
+    }
+
+    ++totalEntities;
   }
 
   Timer {
