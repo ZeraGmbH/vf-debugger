@@ -12,6 +12,16 @@
 #include <QList>
 #include <QMetaType>
 
+#include "eventstatisticsystem.h"
+
+QObject *getStatisticSingletonInstance(QQmlEngine *t_engine, QJSEngine *t_scriptEngine)
+{
+  Q_UNUSED(t_engine);
+  Q_UNUSED(t_scriptEngine);
+
+  return EventStatisticSystem::getStaticInstance();
+}
+
 int main(int argc, char *argv[])
 {
   bool loadedOnce=false;
@@ -31,13 +41,16 @@ int main(int argc, char *argv[])
   qSetMessagePattern(categoryLoggingFormat);
 
   QGuiApplication app(argc, argv);
-
   QQmlApplicationEngine engine;
+
+  qmlRegisterSingletonType<EventStatisticSystem>("EvStats", 1, 0, "EvStats", getStatisticSingletonInstance);
 
   VeinEvent::EventHandler *evHandler = new VeinEvent::EventHandler(&app);
   VeinNet::NetworkSystem *netSystem = new VeinNet::NetworkSystem(&app);
   VeinNet::TcpSystem *tcpSystem = new VeinNet::TcpSystem(&app);
   VeinApiQml::VeinQml *qmlApi = new VeinApiQml::VeinQml(&app);
+  EventStatisticSystem *evStats = new EventStatisticSystem(&app);
+  EventStatisticSystem::setStaticInstance(evStats);
 
   VeinApiQml::VeinQml::setStaticInstance(qmlApi);
   QList<VeinEvent::EventSystem*> subSystems;
@@ -60,6 +73,7 @@ int main(int argc, char *argv[])
   subSystems.append(netSystem);
   subSystems.append(tcpSystem);
   subSystems.append(qmlApi);
+  subSystems.append(evStats);
 
   evHandler->setSubsystems(subSystems);
 

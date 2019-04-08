@@ -20,7 +20,8 @@ unix {
 
 QT += qml quick
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    eventstatisticsystem.cpp
 
 RESOURCES += qml.qrc
 
@@ -48,3 +49,6 @@ isEmpty(SORT_FILTER_PROXY_PRI) {
   #(example) in QtCreator add qmake argument: SORT_FILTER_PROXY_PRI=<some path ...>/SortFilterProxyModel/SortFilterProxyModel.pri
 }
 include($$SORT_FILTER_PROXY_PRI)
+
+HEADERS += \
+    eventstatisticsystem.h

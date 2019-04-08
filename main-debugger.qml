@@ -1,6 +1,7 @@
 import QtQuick 2.2
 import QtQuick.Window 2.2
 import VeinEntity 1.0
+import EvStats 1.0
 import QtQuick.Controls 2.0
 import SortFilterProxyModel 0.2
 import QtQuick.Layouts 1.3
@@ -106,6 +107,13 @@ Window {
       text: qsTr("Total entities: %1\t Total properties: %2\t Total remote procedures: %3\t Search results: %4").arg(root.totalEntities).arg(root.totalProperties).arg(root.totalRPC).arg(entityProxyModel.count)
       anchors.verticalCenter: parent.verticalCenter
     }
+    Text {
+      text: "Events per second: " + EvStats.eventsPerSecond;
+    }
+    Text {
+      text: "Events per minute: " + EvStats.eventsPerMinute;
+    }
+
     Item {
       Layout.fillWidth: true
     }
