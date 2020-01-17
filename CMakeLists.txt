@@ -82,14 +82,12 @@ target_include_directories(VfDebugger
     ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
-#set target Version
-set_target_properties(VfDebugger PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(VfDebugger PROPERTIES SOVERSION ${VfDebugger_VERSION_MAJOR})
+
 
 #install VfDebugger to bin 
 install(TARGETS VfDebugger
     EXPORT VfDebuggerExport
-    LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     )
 
 # spawn out some info on configuration
