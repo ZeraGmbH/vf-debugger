@@ -33,22 +33,30 @@ find_package(VfLogger REQUIRED)
 
 
 #sum up project Files 
-file(GLOB SOURCES 
+file(GLOB APP_SOURCES
     ${PROJECT_SOURCE_DIR}/*.cpp
     )
 
-file(GLOB HEADER
+file(GLOB APP_HEADERS
     ${PROJECT_SOURCE_DIR}/*.h
     )
 
-file(GLOB RESOURCES 
+file(GLOB APP_RESOURCES
     ${PROJECT_SOURCE_DIR}/*.qrc
     )
+
+##include 3RDPARTY sources in seperate file
+include(${PROJECT_SOURCE_DIR}/3rdparty/include3rdParty.cmake)
+
+##Sum up all properties
+set(SOURCES   ${APP_SOURCES} ${3RDPARTY_SOURCES}   )
+set(HEADERS   ${APP_HEADERS} ${3RDPARTY_HEADERS}    )
+set(RESOURCES ${APP_RESOURCES} ${3RDPARTY_RESOURCES})
 
 #create executable
 add_executable(VfDebugger 
     ${SOURCES}
-    ${HEADER}
+    ${HEADERS}
     ${RESOURCES}
     )
 
