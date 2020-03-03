@@ -16,8 +16,8 @@
 
 QObject *getStatisticSingletonInstance(QQmlEngine *t_engine, QJSEngine *t_scriptEngine)
 {
-  Q_UNUSED(t_engine);
-  Q_UNUSED(t_scriptEngine);
+  Q_UNUSED(t_engine)
+  Q_UNUSED(t_scriptEngine)
 
   return EventStatisticSystem::getStaticInstance();
 }
