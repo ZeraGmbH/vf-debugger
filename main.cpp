@@ -13,6 +13,7 @@
 #include <QMetaType>
 
 #include "eventstatisticsystem.h"
+#include <QCommandLineParser>
 
 QObject *getStatisticSingletonInstance(QQmlEngine *t_engine, QJSEngine *t_scriptEngine)
 {
@@ -24,7 +25,14 @@ QObject *getStatisticSingletonInstance(QQmlEngine *t_engine, QJSEngine *t_script
 
 int main(int argc, char *argv[])
 {
+
+
+
+  QCommandLineParser parser;
+
+
   bool loadedOnce=false;
+
 
   QString categoryLoggingFormat = "%{if-debug}DD%{endif}%{if-warning}WW%{endif}%{if-critical}EE%{endif}%{if-fatal}FATAL%{endif} %{category} %{message}";
 
@@ -35,6 +43,7 @@ int main(int argc, char *argv[])
                                                 QString("%1.debug=false").arg(VEIN_API_QML_VERBOSE().categoryName());
 
 
+
   QLoggingCategory::setFilterRules(loggingFilters.join("\n"));
 
 
@@ -43,7 +52,19 @@ int main(int argc, char *argv[])
   QGuiApplication app(argc, argv);
   QQmlApplicationEngine engine;
 
+  const QCommandLineOption veinip("i", "vein ip", "ip");
+  parser.addOption(veinip);
+  parser.process(app);
+
   qmlRegisterSingletonType<EventStatisticSystem>("EvStats", 1, 0, "EvStats", getStatisticSingletonInstance);
+  QString ip;
+  if (parser.isSet(veinip)) {
+      ip = parser.value(veinip);
+  }else{
+      ip="127.0.0.1";
+  }
+
+
 
   VeinEvent::EventHandler *evHandler = new VeinEvent::EventHandler(&app);
   VeinNet::NetworkSystem *netSystem = new VeinNet::NetworkSystem(&app);
@@ -77,7 +98,7 @@ int main(int argc, char *argv[])
 
   evHandler->setSubsystems(subSystems);
 
-  tcpSystem->connectToServer("127.0.0.1", 12000);
+  tcpSystem->connectToServer(ip, 12000);
 
   QObject::connect(tcpSystem, &VeinNet::TcpSystem::sigConnnectionEstablished, [=]() {
     qmlApi->entitySubscribeById(0);
