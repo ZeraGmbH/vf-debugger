@@ -131,11 +131,11 @@ Rectangle {
                     onReleased: {
                         if(isRPC === true)
                         {
-                            console.log('var tracerUID = VeinEntity.getEntity("'+root.entityName+'").invokeRPC("'+componentName+'", <parameterObject>)');
+                            console.info('var tracerUID = VeinEntity.getEntity("'+root.entityName+'").invokeRPC("'+componentName+'", <parameterObject>)');
                         }
                         else
                         {
-                            console.log('VeinEntity.getEntity("'+root.entityName+'")["'+componentName+'"]')
+                            console.info('VeinEntity.getEntity("'+root.entityName+'")["'+componentName+'"]')
                         }
                     }
                 }
@@ -163,11 +163,11 @@ Rectangle {
                     onReleased: {
                         if(isRPC === true)
                         {
-                            console.log('var tracerUID = VeinEntity.getEntity("'+root.entityName+'").invokeRPC("'+componentName+'", <parameterObject>)');
+                            console.info('var tracerUID = VeinEntity.getEntity("'+root.entityName+'").invokeRPC("'+componentName+'", <parameterObject>)');
                         }
                         else
                         {
-                            console.log('VeinEntity.getEntity("'+root.entityName+'")["'+componentName+'"]:', valueToString(VeinEntity.getEntity(root.entityName)[componentName]));
+                            console.info('VeinEntity.getEntity("'+root.entityName+'")["'+componentName+'"]:', valueToString(VeinEntity.getEntity(root.entityName)[componentName]));
                         }
                     }
                 }
