@@ -30,6 +30,7 @@ find_package(VfStorageHash REQUIRED)
 find_package(VfQml REQUIRED)
 find_package(VfNet2 REQUIRED)
 find_package(VfLogger REQUIRED)
+find_package(VfCpp REQUIRED)
 
 
 #sum up project Files 
@@ -75,6 +76,7 @@ target_link_libraries(VfDebugger
     VeinMeta::VfQml
     VeinMeta::VfNet2
     VeinMeta::VfLogger
+    VeinMeta::VfCpp
     )	
 
 

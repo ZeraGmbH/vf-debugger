@@ -8,6 +8,8 @@ Rectangle {
     height: 30
     border.color: "#44000000"
     width: root.width
+    property var rpcTrace : undefined;
+    property var lastResult : ""
     property string entityName;
     property string componentName;
     property QtObject entity;
@@ -27,6 +29,16 @@ Rectangle {
         }
 
         return retVal;
+    }
+
+    function stringToQVariantMap(parameters){
+        if(parameters === ""){
+            parameters="{}"
+        }
+
+        var JsonObj= JSON.parse(parameters);
+        var ret=JsonObj;
+        return ret;
     }
 
     Row {
@@ -70,11 +82,20 @@ Rectangle {
                 anchors.margins: 4
             }
         }
+
+
+
         Item {
             height: parent.height
             width: root.width*0.43
             Text {
-                text: valueToString(root.entity[componentName]);
+                text: {
+                    if(isRPC){
+                        return "Last RPC Result: "+root.lastResult
+                    }
+
+                    return valueToString(root.entity[componentName]);
+                }
                 anchors.fill: parent;
                 anchors.margins: 4
             }
@@ -102,6 +123,8 @@ Rectangle {
                     }else if(type === "number"){
                         var number = parseFloat(text);
                         root.entity[componentName]= number;
+                    }else if(isRPC && root.rpcTrace === undefined){
+                        root.rpcTrace=entity.invokeRPC(componentName, stringToQVariantMap(text))
                     }
                 }
                 Keys.onEscapePressed: {
@@ -109,6 +132,36 @@ Rectangle {
                 }
             }
         }
+
+
+        Connections {
+            target: root.entity
+            onSigRPCFinished: {
+                if(t_resultData["RemoteProcedureData::errorMessage"]) {
+                    console.warn("RPC error:" << t_resultData["RemoteProcedureData::errorMessage"]);
+                }
+
+                if(t_identifier === root.rpcTrace){
+                    root.rpcTrace = undefined;
+                    if(t_resultData["RemoteProcedureData::resultCode"] === 4) { //EINTR, the search was canceled
+                        root.lastResult = "EINTR";
+                    }else{
+                        root.rpcTrace = undefined;
+                        root.lastResult=t_resultData["RemoteProcedureData::Return"];
+                        if(root.lastResult === "" || root.lastResult === undefined){
+                            root.lastResult="NoData";
+                        }
+
+                    }
+                }
+            }
+            onSigRPCProgress: {
+                if(t_identifier === searchProgressId) {
+                    ({"modelData":t_progressData["ZeraDBLogger::searchResultEntry"]});
+                }
+            }
+        }
+
         Item {
             height: parent.height-4
             width: root.width*0.02
@@ -185,10 +238,12 @@ Rectangle {
                 text: {
                     var type = typeof(root.entity[componentName]);
                     if(!valueInput.visible){
-                        if( type !== "string" && type !== "boolean" && type !== "number"){
+                        if( type !== "string" && type !== "boolean" && type !== "number" && isRPC === false){
                             return "Copy";
-                        }else {
-                            return "Edit";
+                        }else if(isRPC){
+                            return "Call";
+                        }else{
+                            return "Edit"
                         }
                     }else{
                         return "Close"
