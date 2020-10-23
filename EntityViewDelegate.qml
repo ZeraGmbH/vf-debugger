@@ -88,7 +88,9 @@ Rectangle {
         Item {
             height: parent.height
             width: root.width*0.43
-            Text {
+            TextEdit {
+                id: valueField
+                readOnly: true
                 text: {
                     if(isRPC){
                         return "Last RPC Result: "+root.lastResult
@@ -98,6 +100,16 @@ Rectangle {
                 }
                 anchors.fill: parent;
                 anchors.margins: 4
+
+                MouseArea {
+                        anchors.fill: parent
+                        acceptedButtons: Qt.MidButton || Qt.LeftButton
+                        onPressed: {
+                            valueField.selectAll();
+                            valueField.copy();
+                            valueField.deselect();
+                        }
+                }
             }
             TextField {
                 id: valueInput
@@ -139,9 +151,7 @@ Rectangle {
             onSigRPCFinished: {
                 if(t_resultData["RemoteProcedureData::errorMessage"]) {
                     console.warn("RPC error:" << t_resultData["RemoteProcedureData::errorMessage"]);
-                }
-
-                if(t_identifier === root.rpcTrace){
+                }else if(t_identifier === root.rpcTrace){
                     root.rpcTrace = undefined;
                     if(t_resultData["RemoteProcedureData::resultCode"] === 4) { //EINTR, the search was canceled
                         root.lastResult = "EINTR";
