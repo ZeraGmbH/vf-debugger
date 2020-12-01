@@ -14,6 +14,11 @@ Rectangle {
     property string componentName;
     property QtObject entity;
     property bool checked: true;
+    property int  col1Width: 0
+    property int  col2Width: 0
+    property int  col3Width: 0
+    property int  col4Width: 0
+    property int  col5Width: 0
 
     property string filterPattern;
 
@@ -41,6 +46,7 @@ Rectangle {
         return ret;
     }
 
+
     Row {
         anchors.fill: parent
         spacing: 0
@@ -48,38 +54,42 @@ Rectangle {
 
         Item {
             height: parent.height
-            width: parent.width*0.16
+            width: root.col1Width
             Text {
                 text: root.entityName + " <font color='blue'>ID: "+ root.entity.entityId() + "</font>";
                 anchors.fill: parent;
                 anchors.margins: 4
+                clip: true
             }
         }
         Item {
             height: parent.height
-            width: parent.width*0.2
+            width: root.col2Width
             Text {
                 text: componentName;
                 anchors.fill: parent;
                 anchors.margins: 4
+                clip: true
             }
         }
         Item {
             height: parent.height
-            width: parent.width*0.08
+            width: root.col3Width
             Text {
                 text: isRPC ? "rpc" : typeof(root.entity[componentName]);
                 anchors.fill: parent;
                 anchors.margins: 4
+                clip: true
             }
         }
         Item {
             height: parent.height
-            width: parent.width*0.06
+            width: root.col4Width
             Text {
                 text: (root.entity[componentName] === undefined || root.entity[componentName].length === undefined || typeof(root.entity[componentName].length) != "number") ? "" : root.entity[componentName].length.toString();
                 anchors.fill: parent;
                 anchors.margins: 4
+                clip: true
             }
         }
 
@@ -87,7 +97,7 @@ Rectangle {
 
         Item {
             height: parent.height
-            width: root.width*0.43
+            width: root.col5Width - 110
             TextEdit {
                 id: valueField
                 readOnly: true

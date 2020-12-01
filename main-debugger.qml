@@ -139,7 +139,8 @@ Window {
         height:  30
         width: root.width
         spacing: 0
-        Rectangle {
+        ResizeableRect {
+            id: col1
             color: "lightblue"
             height: parent.height
             width: parent.width*0.16
@@ -147,7 +148,9 @@ Window {
             border.color: "black"
             Text { text: "Entity name"; font.bold: true; anchors.fill: parent; anchors.margins: 4 }
         }
-        Rectangle {
+        Binding { target: GlobalSettings; property: "col1Width"; value: parent.width }
+        ResizeableRect {
+            id: col2
             color: "lightblue"
             height: parent.height
             width: parent.width*0.2
@@ -155,7 +158,8 @@ Window {
             border.color: "black"
             Text { text: "Component name"; font.bold: true; anchors.fill: parent; anchors.margins: 4 }
         }
-        Rectangle {
+        ResizeableRect {
+            id: col3
             color: "lightblue"
             height: parent.height
             width: parent.width*0.08
@@ -163,7 +167,8 @@ Window {
             border.color: "black"
             Text { text: "Type"; font.bold: true; anchors.fill: parent; anchors.margins: 4 }
         }
-        Rectangle {
+        ResizeableRect {
+            id: col4
             color: "lightblue"
             height: parent.height
             width: parent.width*0.06
@@ -171,10 +176,12 @@ Window {
             border.color: "black"
             Text { text: "Size"; font.bold: true; anchors.fill: parent; anchors.margins: 4 }
         }
-        Rectangle {
+        ResizeableRect {
+            id: col5
             color: "lightblue"
             height: parent.height
-            width: root.width*0.50
+            width: root.width-col1.width-col2.width-col3.width-col4.width
+            //anchors.right: parent.right
             border.width: 1
             border.color: "black"
             Text { text: "Value"; font.bold: true; anchors.fill: parent; anchors.margins: 4 }
@@ -240,6 +247,11 @@ Window {
             active: true
         }
         delegate: EntityViewDelegate {
+            col1Width: col1.width
+            col2Width: col2.width
+            col3Width: col3.width
+            col4Width: col4.width
+            col5Width: col5.width
             width: root.width;
             entityName: entName;
             componentName: compName;
