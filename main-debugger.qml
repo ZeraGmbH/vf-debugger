@@ -18,75 +18,75 @@ Window {
     property int totalRPC: 0
     property bool entitiesLoaded: false
     property string filterPattern: searchField.text
+    property var availableEntities;
 
-    Component.onCompleted: {
+
+    Component.onCompleted:
+    {
         showMaximized();
-        var systemEntity = VeinEntity.getEntity("_System");
-        console.log("onCompleted", systemEntity["Entities"])
-        delayedLoader.start()
-
-        totalProperties += systemEntity.propertyCount();
-        for(var i = 0; i< systemEntity.keys().length; ++i)
-        {
-            fakeModel.append({"entId": 0, "entName":systemEntity.EntityName, "compName": systemEntity.keys()[i], "isRPC": false});
-        }
-        var rpcList = systemEntity.remoteProcedures;
-        totalRPC += rpcList.length;
-        for(var j = 0; j<rpcList.length; ++j)
-        {
-            fakeModel.append({"entId": 0, "entName":systemEntity.EntityName, "compName": rpcList[j], "isRPC": true});
-        }
-
-        ++totalEntities;
     }
 
-    Timer {
-        id: delayedLoader
-        interval: 50
-        repeat: false
-        onTriggered: {
-            var entIds = VeinEntity.getEntity("_System")["Entities"];
-            if(entIds !== undefined)
-            {
-                entIds.push(0);
-            }
-            else
-            {
-                entIds = [0];
-            }
 
-            for(var tmpId in entIds)
-            {
-                VeinEntity.entitySubscribeById(entIds[tmpId]);
-            }
-
-            entitiesLoaded = true
-        }
-    }
-
+    //Adds subscribed entities, when thex are ready.
+    //The first subscribed entity is _VEIN with id "0".
+    //VEIN stores the Entities component, This component stores all available entities by id.
+    //The first thing that happens is that we bind this component to the availableEntities property
     Connections {
         target: VeinEntity
         onSigEntityAvailable: {
-            if(entitiesLoaded === true)
-            {
-                var tmpEntity = VeinEntity.getEntity(t_entityName);
-                var tmpEntityId = tmpEntity.entityId()
-                console.log(qsTr("AVAILABLE '%1'").arg(t_entityName));
-                totalProperties += tmpEntity.propertyCount();
-                for(var i = 0; i< tmpEntity.keys().length; ++i)
-                {
-                    fakeModel.append({"entId": tmpEntityId, "entName":t_entityName, "compName": tmpEntity.keys()[i], "isRPC": false});
+            var tmpEntity = VeinEntity.getEntity(t_entityName);
+            var tmpEntityId = tmpEntity.entityId()
+            console.log(qsTr("AVAILABLE '%1'").arg(t_entityName));
+            if(tmpEntityId === 0){
+                if(tmpEntity.Entities !== undefined){
+                    root.availableEntities=Qt.binding(function(){
+                        return VeinEntity.getEntity("_VEIN")["Entities"];
+                    }
+                    );
                 }
-                var rpcList = tmpEntity.remoteProcedures;
-                totalRPC += rpcList.length;
-                for(var j = 0; j<rpcList.length; ++j)
-                {
-                    fakeModel.append({"entId": tmpEntityId, "entName":t_entityName, "compName": rpcList[j], "isRPC": true});
-                }
+            }
 
-                ++totalEntities;
+            totalProperties += tmpEntity.propertyCount();
+            for(var i = 0; i< tmpEntity.keys().length; ++i)
+            {
+                fakeModel.append({"entId": tmpEntityId, "entName":t_entityName, "compName": tmpEntity.keys()[i], "isRPC": false});
+            }
+            var rpcList = tmpEntity.remoteProcedures;
+            totalRPC += rpcList.length;
+            for(var j = 0; j<rpcList.length; ++j)
+            {
+                fakeModel.append({"entId": tmpEntityId, "entName":t_entityName, "compName": rpcList[j], "isRPC": true});
+            }
+
+            ++totalEntities;
+        }
+
+    }
+    // Subscribes new Entities and unsubscribes removed entities.
+    onAvailableEntitiesChanged: {
+
+        if(root.availableEntities !== undefined){
+
+            var tmpSubscribe=root.availableEntities;
+
+            var currentList=VeinEntity.getEntityList();
+
+            var tmpId;
+
+            // unsubscribe removed entities
+            for(tmpId in currentList){
+                if(!tmpSubscribe.includes(tmpSubscribe[tmpId])){
+                    VeinEntity.entityUnsubscribeById(tmpSubscribe[tmpId]);
+                }
+            }
+            // subscribe new entities
+            for(tmpId in tmpSubscribe){
+                if(!currentList.includes(tmpSubscribe[tmpId])){
+                    VeinEntity.entitySubscribeById(tmpSubscribe[tmpId]);
+                }
             }
         }
+
     }
 
     ListModel {
@@ -105,7 +105,7 @@ Window {
         rows: 1
         Text {
             text: qsTr("Total entities: %1\t Total properties: %2\t Total remote procedures: %3\t Search results: %4").arg(root.totalEntities).arg(root.totalProperties).arg(root.totalRPC).arg(entityProxyModel.count)
-            anchors.verticalCenter: parent.verticalCenter
+//            anchors.verticalCenter: parent.verticalCenter
         }
         Text {
             text: "Events per second: " + EvStats.eventsPerSecond;
