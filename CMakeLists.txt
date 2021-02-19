@@ -92,7 +92,8 @@ target_include_directories(VfDebugger
     ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
-
+# add Qml-Debug for Debug build envirionemt only
+target_compile_definitions(VfDebugger PRIVATE $<$<CONFIG:Debug>:QT_QML_DEBUG>)
 
 #install VfDebugger to bin 
 install(TARGETS VfDebugger
