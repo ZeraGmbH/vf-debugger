@@ -65,11 +65,17 @@ Rectangle {
         Item {
             height: parent.height
             width: root.col2Width
-            Text {
+            TextField {
                 text: componentName;
                 anchors.fill: parent;
                 anchors.margins: 4
-                clip: true
+                readOnly: true
+                selectByMouse: true
+                padding:0
+                autoScroll: false
+                background: Rectangle {
+                    color: "transparent"
+                }
             }
         }
         Item {
