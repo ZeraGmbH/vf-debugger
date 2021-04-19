@@ -77,15 +77,10 @@ int main(int argc, char *argv[])
   QList<VeinEvent::EventSystem*> subSystems;
 
   QObject::connect(qmlApi,&VeinApiQml::VeinQml::sigStateChanged, [&](VeinApiQml::VeinQml::ConnectionState t_state){
-    if(t_state == VeinApiQml::VeinQml::ConnectionState::VQ_LOADED && loadedOnce == false)
-    {
-      engine.load(QUrl(QStringLiteral("qrc:/main-debugger.qml")));
-      loadedOnce=true;
-    }
-    else if(t_state == VeinApiQml::VeinQml::ConnectionState::VQ_ERROR)
-    {
-      engine.quit();
-    }
+      if(t_state == VeinApiQml::VeinQml::ConnectionState::VQ_ERROR)
+      {
+          engine.quit();
+      }
   });
 
   netSystem->setOperationMode(VeinNet::NetworkSystem::VNOM_PASS_THROUGH);
@@ -98,11 +93,27 @@ int main(int argc, char *argv[])
 
   evHandler->setSubsystems(subSystems);
 
-  tcpSystem->connectToServer(ip, 12000);
 
-  QObject::connect(tcpSystem, &VeinNet::TcpSystem::sigConnnectionEstablished, [=]() {
-    qmlApi->entitySubscribeById(0);
+  QTimer networkWatchdog;
+  networkWatchdog.setInterval(1000);
+
+  QObject::connect(&networkWatchdog, &QTimer::timeout, [&]() {
+      tcpSystem->connectToServer(ip, 12000);
   });
+
+  QObject::connect(tcpSystem, &VeinNet::TcpSystem::sigConnnectionEstablished, [&]() {
+    engine.load(QUrl(QStringLiteral("qrc:/main-debugger.qml")));
+    qmlApi->entitySubscribeById(0);
+    networkWatchdog.stop();
+  });
+
+  QObject::connect(tcpSystem, &VeinNet::TcpSystem::sigClientDisconnected, [&]() {
+    networkWatchdog.start();
+  });
+
+  networkWatchdog.start();
+
+
 
   return app.exec();
 }

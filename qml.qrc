@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>main-debugger.qml</file>
         <file>EntityViewDelegate.qml</file>
+        <file>ResizeableRect.qml</file>
     </qresource>
 </RCC>
