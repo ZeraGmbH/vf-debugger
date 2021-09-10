@@ -29,7 +29,7 @@ find_package(VfComponent REQUIRED)
 find_package(VfStorageHash REQUIRED)
 find_package(VfQml REQUIRED)
 find_package(VfNet2 REQUIRED)
-find_package(VfLogger REQUIRED)
+#find_package(VfLogger REQUIRED)
 find_package(VfCpp REQUIRED)
 
 
@@ -75,7 +75,6 @@ target_link_libraries(VfDebugger
     VeinMeta::VfStorageHash
     VeinMeta::VfQml
     VeinMeta::VfNet2
-    VeinMeta::VfLogger
     VeinMeta::VfCpp
     )	
 
