@@ -149,13 +149,15 @@ Rectangle {
         Connections {
             target: root.entity
             onSigRPCFinished: {
-                if(t_resultData["RemoteProcedureData::errorMessage"]) {
-                    console.warn("RPC error:" << t_resultData["RemoteProcedureData::errorMessage"]);
-                }else if(t_identifier === root.rpcTrace){
+                if(t_identifier === root.rpcTrace) {
+                    if(t_resultData["RemoteProcedureData::errorMessage"]) {
+                        console.warn("RPC error:" << t_resultData["RemoteProcedureData::errorMessage"]);
+                    }
                     root.rpcTrace = undefined;
                     if(t_resultData["RemoteProcedureData::resultCode"] === 4) { //EINTR, the search was canceled
                         root.lastResult = "EINTR";
-                    }else{
+                    }
+                    else {
                         root.rpcTrace = undefined;
                         root.lastResult=t_resultData["RemoteProcedureData::Return"];
                         if(root.lastResult === "" || root.lastResult === undefined){
