@@ -120,8 +120,7 @@ Rectangle {
                 onVisibleChanged: {
                     forceActiveFocus();
                 }
-
-                onEditingFinished: {
+                onAccepted: {
                     visible=false;
                     var type = typeof(root.entity[componentName]);
                     if(type === "string"){
