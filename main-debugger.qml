@@ -26,44 +26,34 @@ Window {
         delayedLoader.start()
 
         totalProperties += systemEntity.propertyCount();
-        for(var i = 0; i< systemEntity.keys().length; ++i)
-        {
+        for(var i = 0; i< systemEntity.keys().length; ++i) {
             fakeModel.append({"entId": 0, "entName":systemEntity.EntityName, "compName": systemEntity.keys()[i], "isRPC": false});
         }
         var rpcList = systemEntity.remoteProcedures;
         totalRPC += rpcList.length;
-        for(var j = 0; j<rpcList.length; ++j)
-        {
+        for(var j = 0; j<rpcList.length; ++j) {
             fakeModel.append({"entId": 0, "entName":systemEntity.EntityName, "compName": rpcList[j], "isRPC": true});
         }
-
         ++totalEntities;
     }
-
     Timer {
         id: delayedLoader
         interval: 50
         repeat: false
         onTriggered: {
             var entIds = VeinEntity.getEntity("_System")["Entities"];
-            if(entIds !== undefined)
-            {
+            if(entIds !== undefined) {
                 entIds.push(0);
             }
-            else
-            {
+            else {
                 entIds = [0];
             }
-
-            for(var tmpId in entIds)
-            {
+            for(var tmpId in entIds) {
                 VeinEntity.entitySubscribeById(entIds[tmpId]);
             }
-
             entitiesLoaded = true
         }
     }
-
     Connections {
         target: VeinEntity
         function onSigEntityAvailable(t_entityName) {
@@ -88,7 +78,6 @@ Window {
     ListModel {
         id: fakeModel
     }
-
     GridLayout {
         id: headerBar
         height: 48
@@ -108,11 +97,9 @@ Window {
         Text {
             text: "Events per minute: " + EvStats.eventsPerMinute;
         }
-
         Item {
             Layout.fillWidth: true
         }
-
         TextField {
             id: searchField
 
@@ -126,8 +113,6 @@ Window {
             enabled: searchField.text.length > 0
         }
     }
-
-
     Row {
         id: headLine
         anchors.top: headerBar.bottom
@@ -183,7 +168,6 @@ Window {
             RoleSorter { roleName: "entName"; },
             RoleSorter { roleName: "compName" }
         ]
-
         filters: [
             AnyOf {
                 RegExpFilter {
@@ -204,7 +188,6 @@ Window {
             }
         ]
     }
-
     Component {
         id: sectionHeading
         Rectangle {
