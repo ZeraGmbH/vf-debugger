@@ -9,7 +9,7 @@ Rectangle {
     border.color: "#44000000"
     width: root.width
     property var rpcTrace : undefined;
-    property var lastResult : ""
+    property var lastResult: "{}"
     property string entityName;
     property string componentName;
     property QtObject entity;
@@ -86,7 +86,7 @@ Rectangle {
                 readOnly: true
                 text: {
                     if(isRPC) {
-                        return "Last RPC Result: "+root.lastResult
+                        return "Last Result: " + root.lastResult
                     }
                     return valueToString(root.entity[componentName]);
                 }
@@ -138,21 +138,18 @@ Rectangle {
             target: root.entity
             function onSigRPCFinished(t_identifier, t_resultData) {
                 if(t_identifier === root.rpcTrace) {
+                    root.rpcTrace = undefined;
                     if(t_resultData["RemoteProcedureData::errorMessage"]) {
                         console.error("RPC error:", t_resultData["RemoteProcedureData::errorMessage"]);
                     }
-                    root.rpcTrace = undefined;
-                    if(t_resultData["RemoteProcedureData::resultCode"] === 4) { //EINTR, the search was canceled
-                        root.lastResult = "EINTR";
-                    }
-                    else {
-                        root.rpcTrace = undefined;
-                        root.lastResult=t_resultData["RemoteProcedureData::Return"];
-                        if(root.lastResult === "" || root.lastResult === undefined){
-                            root.lastResult="NoData";
-                        }
-
-                    }
+                    // deep copy
+                    let strResult = JSON.stringify(t_resultData)
+                    let lastResult = JSON.parse(strResult)
+                    // shorten
+                    delete lastResult["RemoteProcedureData::callID"]
+                    strResult = JSON.stringify(lastResult)
+                    strResult = strResult.replace(new RegExp("RemoteProcedureData::", "g"), "<RPD>::")
+                    root.lastResult = strResult
                 }
             }
             function onSigRPCProgress(t_identifier, t_progressData) {
