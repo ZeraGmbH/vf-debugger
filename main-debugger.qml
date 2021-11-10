@@ -66,24 +66,20 @@ Window {
 
     Connections {
         target: VeinEntity
-        onSigEntityAvailable: {
-            if(entitiesLoaded === true)
-            {
+        function onSigEntityAvailable(t_entityName) {
+            if(entitiesLoaded === true) {
                 var tmpEntity = VeinEntity.getEntity(t_entityName);
                 var tmpEntityId = tmpEntity.entityId()
                 console.log(qsTr("AVAILABLE '%1'").arg(t_entityName));
                 totalProperties += tmpEntity.propertyCount();
-                for(var i = 0; i< tmpEntity.keys().length; ++i)
-                {
+                for(var i = 0; i< tmpEntity.keys().length; ++i) {
                     fakeModel.append({"entId": tmpEntityId, "entName":t_entityName, "compName": tmpEntity.keys()[i], "isRPC": false});
                 }
                 var rpcList = tmpEntity.remoteProcedures;
                 totalRPC += rpcList.length;
-                for(var j = 0; j<rpcList.length; ++j)
-                {
+                for(var j = 0; j<rpcList.length; ++j) {
                     fakeModel.append({"entId": tmpEntityId, "entName":t_entityName, "compName": rpcList[j], "isRPC": true});
                 }
-
                 ++totalEntities;
             }
         }

@@ -144,11 +144,9 @@ Rectangle {
                 }
             }
         }
-
-
         Connections {
             target: root.entity
-            onSigRPCFinished: {
+            function onSigRPCFinished(t_identifier, t_resultData) {
                 if(t_identifier === root.rpcTrace) {
                     if(t_resultData["RemoteProcedureData::errorMessage"]) {
                         console.warn("RPC error:" << t_resultData["RemoteProcedureData::errorMessage"]);
@@ -167,9 +165,9 @@ Rectangle {
                     }
                 }
             }
-            onSigRPCProgress: {
+            function onSigRPCProgress(t_identifier, t_progressData) {
                 if(t_identifier === searchProgressId) {
-                    ({"modelData":t_progressData["ZeraDBLogger::searchResultEntry"]});
+                    // No more supported currently - but will be revived
                 }
             }
         }
