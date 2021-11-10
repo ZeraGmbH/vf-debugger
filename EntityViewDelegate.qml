@@ -149,7 +149,7 @@ Rectangle {
             function onSigRPCFinished(t_identifier, t_resultData) {
                 if(t_identifier === root.rpcTrace) {
                     if(t_resultData["RemoteProcedureData::errorMessage"]) {
-                        console.warn("RPC error:" << t_resultData["RemoteProcedureData::errorMessage"]);
+                        console.error("RPC error:", t_resultData["RemoteProcedureData::errorMessage"]);
                     }
                     root.rpcTrace = undefined;
                     if(t_resultData["RemoteProcedureData::resultCode"] === 4) { //EINTR, the search was canceled
