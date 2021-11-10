@@ -14,7 +14,6 @@ Rectangle {
     property string componentName;
     property QtObject entity;
     property bool checked: true;
-
     property string filterPattern;
 
     function valueToString(t_value) {
@@ -22,12 +21,10 @@ Rectangle {
         if(t_value !== undefined)
         {
             retVal = t_value.toString();
-            if (retVal === "[object Object]")
-            {
+            if (retVal === "[object Object]") {
                 retVal = JSON.stringify(t_value);
             }
         }
-
         return retVal;
     }
 
@@ -35,7 +32,6 @@ Rectangle {
         if(parameters === ""){
             parameters="{}"
         }
-
         var JsonObj= JSON.parse(parameters);
         var ret=JsonObj;
         return ret;
@@ -82,9 +78,6 @@ Rectangle {
                 anchors.margins: 4
             }
         }
-
-
-
         Item {
             height: parent.height
             width: root.width*0.43
@@ -92,23 +85,21 @@ Rectangle {
                 id: valueField
                 readOnly: true
                 text: {
-                    if(isRPC){
+                    if(isRPC) {
                         return "Last RPC Result: "+root.lastResult
                     }
-
                     return valueToString(root.entity[componentName]);
                 }
                 anchors.fill: parent;
                 anchors.margins: 4
-
                 MouseArea {
-                        anchors.fill: parent
-                        acceptedButtons: Qt.MidButton || Qt.LeftButton
-                        onPressed: {
-                            valueField.selectAll();
-                            valueField.copy();
-                            valueField.deselect();
-                        }
+                    anchors.fill: parent
+                    acceptedButtons: Qt.MidButton || Qt.LeftButton
+                    onPressed: {
+                        valueField.selectAll();
+                        valueField.copy();
+                        valueField.deselect();
+                    }
                 }
             }
             TextField {
@@ -123,19 +114,19 @@ Rectangle {
                 onAccepted: {
                     visible=false;
                     var type = typeof(root.entity[componentName]);
-                    if(type === "string"){
+                    if(type === "string") {
                         root.entity[componentName]=text;
-                    }else if(type === "boolean"){
+                    } else if(type === "boolean") {
                         if(text === "true"){
                             root.entity[componentName]=true;
-                        }else if(text === "false"){
+                        } else if(text === "false") {
                             root.entity[componentName]=false;
                         }
-                    }else if(type === "number"){
+                    } else if(type === "number") {
                         var number = parseFloat(text);
                         root.entity[componentName]= number;
-                    }else if(isRPC && root.rpcTrace === undefined){
-                        root.rpcTrace=entity.invokeRPC(componentName, stringToQVariantMap(text))
+                    } else if(isRPC && root.rpcTrace === undefined) {
+                        root.rpcTrace = entity.invokeRPC(componentName, stringToQVariantMap(text))
                     }
                 }
                 Keys.onEscapePressed: {
@@ -191,12 +182,10 @@ Rectangle {
                         parent.color = pressed ? "lightsteelblue" : "steelblue"
                     }
                     onReleased: {
-                        if(isRPC === true)
-                        {
+                        if(isRPC === true) {
                             console.info('var tracerUID = VeinEntity.getEntity("'+root.entityName+'").invokeRPC("'+componentName+'", <parameterObject>)');
                         }
-                        else
-                        {
+                        else {
                             console.info('VeinEntity.getEntity("'+root.entityName+'")["'+componentName+'"]')
                         }
                     }
@@ -223,12 +212,10 @@ Rectangle {
                         parent.color = pressed ? "purple" : "green"
                     }
                     onReleased: {
-                        if(isRPC === true)
-                        {
+                        if(isRPC === true) {
                             console.info('var tracerUID = VeinEntity.getEntity("'+root.entityName+'").invokeRPC("'+componentName+'", <parameterObject>)');
                         }
-                        else
-                        {
+                        else {
                             console.info('VeinEntity.getEntity("'+root.entityName+'")["'+componentName+'"]:', valueToString(VeinEntity.getEntity(root.entityName)[componentName]));
                         }
                     }
@@ -246,46 +233,41 @@ Rectangle {
                 color: valueInput.visible ?  "red" : "black"
                 text: {
                     var type = typeof(root.entity[componentName]);
-                    if(!valueInput.visible){
-                        if( type !== "string" && type !== "boolean" && type !== "number" && isRPC === false){
+                    if(!valueInput.visible) {
+                        if( type !== "string" && type !== "boolean" && type !== "number" && isRPC === false) {
                             return "Copy";
-                        }else if(isRPC){
+                        } else if(isRPC) {
                             return "Call";
-                        }else{
+                        } else {
                             return "Edit"
                         }
-                    }else{
+                    } else {
                         return "Close"
                     }
                 }
                 background: Rectangle{
                     id: backColor
                     color: {
-                        if(buttonArea.pressed){
+                        if(buttonArea.pressed) {
                             return "blue";
-                        }else{
+                        } else {
                             return buttonArea.containsMouse ? "grey"  : "white";
                         }
                     }
                 }
-
                 MouseArea {
                     id: buttonArea
                     anchors.fill: parent
                     hoverEnabled: true
                     onPressedChanged: {
-                        if(pressed && !valueInput.visible){
+                        if(pressed && !valueInput.visible) {
                             valueInput.visible=true;
                             valueInput.text=valueToString(root.entity[componentName]);
                             valueInput.selectAll();
-                        }else if(pressed && valueInput.visible){
+                        } else if(pressed && valueInput.visible) {
                             valueInput.visible=false;
                         }
-
-
-
                     }
-
                 }
             }
         }
