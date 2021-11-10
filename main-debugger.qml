@@ -105,7 +105,6 @@ Window {
         rows: 1
         Text {
             text: qsTr("Total entities: %1\t Total properties: %2\t Total remote procedures: %3\t Search results: %4").arg(root.totalEntities).arg(root.totalProperties).arg(root.totalRPC).arg(entityProxyModel.count)
-            anchors.verticalCenter: parent.verticalCenter
         }
         Text {
             text: "Events per second: " + EvStats.eventsPerSecond;
