@@ -86,7 +86,7 @@ Rectangle {
                 readOnly: true
                 text: {
                     if(isRPC) {
-                        return "Last Result: " + root.lastResult
+                        return root.rpcTrace === undefined ? "Result: " + root.lastResult : "Running..."
                     }
                     return valueToString(root.entity[componentName]);
                 }
