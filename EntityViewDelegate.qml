@@ -108,6 +108,7 @@ Rectangle {
                 anchors.margins: 0
                 visible: false
                 selectByMouse: true
+                maximumLength: 1000000
                 onVisibleChanged: {
                     forceActiveFocus();
                 }
