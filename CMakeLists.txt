@@ -15,7 +15,6 @@ include(GNUInstallDirs)
 
 find_package(Qt5 COMPONENTS Quick Core Qml Sql Network CONFIG REQUIRED)
 find_package(VeinFramework REQUIRED)
-find_package(VfQml REQUIRED)
 find_package(VfCpp REQUIRED)
 
 file(GLOB APP_SOURCES
@@ -54,7 +53,7 @@ target_link_libraries(VfDebugger
     Zera::VfComponent
     Zera::VfStorageHash
     Zera::VfNet2
-    VeinMeta::VfQml
+    Zera::VfQml
     VeinMeta::VfCpp
     )
 
