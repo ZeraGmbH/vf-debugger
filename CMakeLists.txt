@@ -53,7 +53,6 @@ target_link_libraries(VfDebugger
     Zera::VfStorageHash
     Zera::VfNet2
     Zera::VfQml
-    Zera::VfCpp
     )
 
 target_include_directories(VfDebugger 
