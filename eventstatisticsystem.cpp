@@ -33,13 +33,12 @@ void EventStatisticSystem::setStaticInstance(EventStatisticSystem *t_instance)
   }
 }
 
-bool EventStatisticSystem::processEvent(QEvent *t_event)
+void EventStatisticSystem::processEvent(QEvent *t_event)
 {
   Q_UNUSED(t_event);
   //events counted include both commandevents and protocolevents
   //so the displayed number should be twice of what the database replay shows with '-t 1000'
   m_eventCounter++;
-  return false;
 }
 
 void EventStatisticSystem::updateAverage()

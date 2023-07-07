@@ -18,14 +18,12 @@ public:
   int eventsPerSecond() const;
   static EventStatisticSystem *getStaticInstance();
   static void setStaticInstance(EventStatisticSystem *t_instance);
+  void processEvent(QEvent *t_event) override;
 
 signals:
   void sigEventsPerMinuteChanged(int eventsPerMinute);
   void sigEventsPerSecondChanged(int eventsPerSecond);
 
-  // EventSystem interface
-public:
-  bool processEvent(QEvent *t_event) override;
 
 
 
