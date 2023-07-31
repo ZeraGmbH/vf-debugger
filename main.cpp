@@ -60,7 +60,6 @@ int main(int argc, char *argv[])
     EventStatisticSystem::setStaticInstance(evStats);
 
     VeinApiQml::VeinQml::setStaticInstance(qmlApi);
-    QList<VeinEvent::EventSystem*> subSystems;
 
     QObject::connect(qmlApi,&VeinApiQml::VeinQml::sigStateChanged, [&](VeinApiQml::VeinQml::ConnectionState t_state) {
         if(t_state == VeinApiQml::VeinQml::ConnectionState::VQ_LOADED && loadedOnce == false) {
@@ -73,6 +72,7 @@ int main(int argc, char *argv[])
     });
     netSystem->setOperationMode(VeinNet::NetworkSystem::VNOM_PASS_THROUGH);
 
+    QList<VeinEvent::EventSystem*> subSystems;
     subSystems.append(netSystem);
     subSystems.append(tcpSystem);
     subSystems.append(qmlApi);
