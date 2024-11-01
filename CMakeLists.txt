@@ -49,7 +49,6 @@ target_link_libraries(VfDebugger
     Qt5::Quick
     Zera::VfEvent
     Zera::VfComponent
-    Zera::VfStorageHash
     Zera::VfNet2
     Zera::VfQml
     )
