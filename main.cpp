@@ -26,7 +26,6 @@ QObject *getStatisticSingletonInstance(QQmlEngine *t_engine, QJSEngine *t_script
 int main(int argc, char *argv[])
 {
     QCommandLineParser parser;
-    bool loadedOnce=false;
 
     QString categoryLoggingFormat = "%{if-debug}DD%{endif}%{if-warning}WW%{endif}%{if-critical}EE%{endif}%{if-fatal}FATAL%{endif} %{category} %{message}";
     QStringList loggingFilters = QStringList() << QString("%1.debug=false").arg(VEIN_EVENT().categoryName()) <<
@@ -61,12 +60,9 @@ int main(int argc, char *argv[])
 
     VeinApiQml::VeinQml::setStaticInstance(qmlApi);
 
+    engine.load(QUrl(QStringLiteral("qrc:/main-debugger.qml")));
     QObject::connect(qmlApi,&VeinApiQml::VeinQml::sigStateChanged, [&](VeinApiQml::VeinQml::ConnectionState t_state) {
-        if(t_state == VeinApiQml::VeinQml::ConnectionState::VQ_LOADED && loadedOnce == false) {
-            engine.load(QUrl(QStringLiteral("qrc:/main-debugger.qml")));
-            loadedOnce=true;
-        }
-        else if(t_state == VeinApiQml::VeinQml::ConnectionState::VQ_ERROR) {
+        if(t_state == VeinApiQml::VeinQml::ConnectionState::VQ_ERROR) {
             engine.quit();
         }
     });

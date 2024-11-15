@@ -16,61 +16,60 @@ Window {
     property int totalProperties: 0
     property int totalEntities: 0
     property int totalRPC: 0
-    property bool entitiesLoaded: false
     property string filterPattern: searchField.text
 
     Component.onCompleted: {
         showMaximized();
-        var systemEntity = VeinEntity.getEntity("_System");
-        console.log("onCompleted", systemEntity["Entities"])
-        delayedLoader.start()
+    }
+    property string currentSession
+    onCurrentSessionChanged: {
+        if(currentSession !== "") {
+            var availableEntityIds = VeinEntity.getEntity("_System")["Entities"];
+            if(availableEntityIds === undefined)
+                availableEntityIds = [];
+            var oldIdList = VeinEntity.getEntityList();
 
-        totalProperties += systemEntity.propertyCount();
-        for(var i = 0; i< systemEntity.keys().length; ++i) {
-            fakeModel.append({"entId": 0, "entName":systemEntity.EntityName, "compName": systemEntity.keys()[i], "isRPC": false});
+            for(var idIterator in availableEntityIds) {
+                let entityId = availableEntityIds[idIterator]
+                if(!oldIdList.includes(entityId))
+                    VeinEntity.entitySubscribeById(entityId);
+            }
         }
-        var rpcList = systemEntity.remoteProcedures;
-        totalRPC += rpcList.length;
-        for(var j = 0; j<rpcList.length; ++j) {
-            fakeModel.append({"entId": 0, "entName":systemEntity.EntityName, "compName": rpcList[j], "isRPC": true});
-        }
-        ++totalEntities;
-    }
-    Timer {
-        id: delayedLoader
-        interval: 50
-        repeat: false
-        onTriggered: {
-            var entIds = VeinEntity.getEntity("_System")["Entities"];
-            if(entIds !== undefined) {
-                entIds.push(0);
-            }
-            else {
-                entIds = [0];
-            }
-            for(var tmpId in entIds) {
-                VeinEntity.entitySubscribeById(entIds[tmpId]);
-            }
-            entitiesLoaded = true
+        else {
+            fakeModel.clear()
+            totalEntities = 0
+            totalProperties = 0
+            totalRPC = 0
         }
     }
+
     Connections {
         target: VeinEntity
         function onSigEntityAvailable(t_entityName) {
-            if(entitiesLoaded === true) {
-                var tmpEntity = VeinEntity.getEntity(t_entityName);
-                var tmpEntityId = tmpEntity.entityId()
-                console.log(qsTr("AVAILABLE '%1'").arg(t_entityName));
-                totalProperties += tmpEntity.propertyCount();
-                for(var i = 0; i< tmpEntity.keys().length; ++i) {
-                    fakeModel.append({"entId": tmpEntityId, "entName":t_entityName, "compName": tmpEntity.keys()[i], "isRPC": false});
+            if(t_entityName === "_System") {
+                currentSession = Qt.binding(function() {
+                    return VeinEntity.getEntity("_System").Session
+               });
+            }
+        }
+        function onSigStateChanged(state) {
+            if(state === VeinEntity.VQ_LOADED) {
+                var availableEntityIds = VeinEntity.getEntity("_System")["Entities"];
+                for(var idIterator in availableEntityIds) {
+                    let entityId = availableEntityIds[idIterator]
+                    let entity = VeinEntity.getEntityById(entityId)
+
+                    totalProperties += entity.propertyCount();
+                    for(var i = 0; i< entity.keys().length; ++i) {
+                        fakeModel.append({"entId": 0, "entName":entity.EntityName, "compName": entity.keys()[i], "isRPC": false});
+                    }
+                    var rpcList = entity.remoteProcedures;
+                    totalRPC += rpcList.length;
+                    for(var j = 0; j<rpcList.length; ++j) {
+                        fakeModel.append({"entId": 0, "entName":entity.EntityName, "compName": rpcList[j], "isRPC": true});
+                    }
+                    ++totalEntities;
                 }
-                var rpcList = tmpEntity.remoteProcedures;
-                totalRPC += rpcList.length;
-                for(var j = 0; j<rpcList.length; ++j) {
-                    fakeModel.append({"entId": tmpEntityId, "entName":t_entityName, "compName": rpcList[j], "isRPC": true});
-                }
-                ++totalEntities;
             }
         }
     }
