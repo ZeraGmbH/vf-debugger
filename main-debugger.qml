@@ -57,12 +57,13 @@ Window {
                 var availableEntityIds = VeinEntity.getEntity("_System")["Entities"];
                 for(var idIterator in availableEntityIds) {
                     let entityId = availableEntityIds[idIterator]
-                    let entity = VeinEntity.getEntityById(entityId)
 
+                    let entity = VeinEntity.getEntityById(entityId)
                     totalProperties += entity.propertyCount();
                     for(var i = 0; i< entity.keys().length; ++i) {
                         fakeModel.append({"entId": 0, "entName":entity.EntityName, "compName": entity.keys()[i], "isRPC": false});
                     }
+
                     var rpcList = entity.remoteProcedures;
                     totalRPC += rpcList.length;
                     for(var j = 0; j<rpcList.length; ++j) {
