@@ -7,7 +7,7 @@
 #include <vn_tcpsystem.h>
 #include <veinqml.h>
 #include <veinqmlwrapper.h>
-
+#include <tcpnetworkfactory.h>
 #include <QDataStream>
 #include <QList>
 #include <QMetaType>
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 
     VeinEvent::EventHandler *evHandler = new VeinEvent::EventHandler(&app);
     VeinNet::NetworkSystem *netSystem = new VeinNet::NetworkSystem(&app);
-    VeinNet::TcpSystem *tcpSystem = new VeinNet::TcpSystem(&app);
+    VeinNet::TcpSystem *tcpSystem = new VeinNet::TcpSystem(VeinTcp::TcpNetworkFactory::create(), &app);
     VeinApiQml::VeinQml *qmlApi = new VeinApiQml::VeinQml(&app);
     EventStatisticSystem *evStats = new EventStatisticSystem(&app);
     EventStatisticSystem::setStaticInstance(evStats);
