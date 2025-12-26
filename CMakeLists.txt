@@ -15,24 +15,19 @@ include(GNUInstallDirs)
 
 find_package(Qt5 COMPONENTS Quick Core Qml Sql Network CONFIG REQUIRED)
 find_package(VeinFramework REQUIRED)
+find_package(SortFilterProxyModel REQUIRED)
 
-file(GLOB APP_SOURCES
+file(GLOB SOURCES
     ${PROJECT_SOURCE_DIR}/*.cpp
     )
 
-file(GLOB APP_HEADERS
+file(GLOB HEADERS
     ${PROJECT_SOURCE_DIR}/*.h
     )
 
-file(GLOB APP_RESOURCES
+file(GLOB RESOURCES
     ${PROJECT_SOURCE_DIR}/*.qrc
     )
-
-include(${PROJECT_SOURCE_DIR}/3rdparty/include3rdParty.cmake)
-
-set(SOURCES   ${APP_SOURCES} ${3RDPARTY_SOURCES}   )
-set(HEADERS   ${APP_HEADERS} ${3RDPARTY_HEADERS}    )
-set(RESOURCES ${APP_RESOURCES} ${3RDPARTY_RESOURCES})
 
 add_executable(VfDebugger 
     ${SOURCES}
@@ -51,6 +46,7 @@ target_link_libraries(VfDebugger
     Zera::VfComponent
     Zera::VfNet2
     Zera::VfQml
+    SortFilterProxyModel::SortFilterProxyModel
     )
 
 target_include_directories(VfDebugger 
