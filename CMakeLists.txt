@@ -13,7 +13,10 @@ set(PROJECT_VERSION "${VfDebugger_VERSION_MAJOR}.${VfDebugger_VERSION_MINOR}.${V
 include(FeatureSummary)
 include(GNUInstallDirs)
 
-find_package(Qt5 COMPONENTS Quick Core Qml Sql Network CONFIG REQUIRED)
+set(QT_MAJOR_VER "5" CACHE STRING "Qt major version")
+set(QTX "Qt${QT_MAJOR_VER}")
+
+find_package(${QTX} COMPONENTS Quick Core Qml Sql Network CONFIG REQUIRED)
 find_package(VeinFramework REQUIRED)
 find_package(SortFilterProxyModel REQUIRED)
 
@@ -37,11 +40,11 @@ add_executable(VfDebugger
 
 target_link_libraries(VfDebugger 
     PRIVATE
-    Qt5::Core
-    Qt5::Qml
-    Qt5::Sql
-    Qt5::Network
-    Qt5::Quick
+    ${QTX}::Core
+    ${QTX}::Qml
+    ${QTX}::Sql
+    ${QTX}::Network
+    ${QTX}::Quick
     Zera::VfEvent
     Zera::VfComponent
     Zera::VfNet2
