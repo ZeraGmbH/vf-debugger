@@ -45,12 +45,10 @@ Window {
 
     Connections {
         target: VeinEntity
-        function onSigEntityAvailable(t_entityName) {
-            if(t_entityName === "_System") {
-                currentSession = Qt.binding(function() {
-                    return VeinEntity.getEntity("_System").Session
-               });
-            }
+        function onSigSystemEntityAvailable() {
+            currentSession = Qt.binding(function() {
+                return VeinEntity.getEntity("_System").Session
+            });
         }
         function onSigStateChanged(state) {
             if(state === VeinEntity.VQ_LOADED) {
